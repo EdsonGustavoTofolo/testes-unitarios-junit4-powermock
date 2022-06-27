@@ -9,7 +9,9 @@ import br.ce.wcaquino.exceptions.LocadoraException;
 import br.ce.wcaquino.servicos.matchers.DiaSemanaMatcher;
 import br.ce.wcaquino.utils.DataUtils;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.Is;
 import org.junit.*;
+import org.junit.rules.ErrorCollector;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,8 +32,8 @@ import static org.mockito.Mockito.*;
 
 public class LocacaoServiceTest {
 
-//    @Rule
-//    public ErrorCollector error = new ErrorCollector();
+    @Rule
+    public ErrorCollector error = new ErrorCollector();
 
     @Mock
     private SpcService spcService;
@@ -84,9 +86,9 @@ public class LocacaoServiceTest {
         Locacao locacao = service.alugarFilmes(usuario, List.of(filme1));
 
         // verificacao via @Rule ErrorCollector
-//        this.error.checkThat(locacao.getValor(), Is.is(6.0));
-//        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), Is.is(true));
-//        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), Is.is(false));
+        this.error.checkThat(locacao.getValor(), Is.is(5.0));
+        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), Is.is(true));
+        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), Is.is(true));
 
         //verificacao via Assert
         Assert.assertEquals(5.0, locacao.getValor(), 0.01);

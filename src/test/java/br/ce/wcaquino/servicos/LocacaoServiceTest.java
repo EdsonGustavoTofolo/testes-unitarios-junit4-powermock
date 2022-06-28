@@ -14,7 +14,10 @@ import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -28,10 +31,12 @@ import static br.ce.wcaquino.servicos.builders.UsuarioBuilder.umUsuario;
 import static br.ce.wcaquino.servicos.matchers.OwnMatchers.*;
 import static br.ce.wcaquino.utils.DataUtils.obterDataComDiferencaDias;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({LocacaoService.class, DataUtils.class})
+//@PrepareForTest({LocacaoService.class, DataUtils.class})
+@PrepareForTest({LocacaoService.class})
 public class LocacaoServiceTest {
 
     @Rule
@@ -82,7 +87,14 @@ public class LocacaoServiceTest {
 //        Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 
         // Com PowerMock
-        PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 4, 2017));
+//        PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 4, 2017));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 28);
+        calendar.set(Calendar.MONTH, Calendar.APRIL);
+        calendar.set(Calendar.YEAR, 2017);
+
+        PowerMockito.mockStatic(Calendar.class);
+        PowerMockito.when(Calendar.getInstance()).thenReturn(calendar);
 
         //cenario
         Usuario usuario = umUsuario().get();
@@ -93,18 +105,18 @@ public class LocacaoServiceTest {
 
         // verificacao via @Rule ErrorCollector
         this.error.checkThat(locacao.getValor(), Is.is(5.0));
-        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), Is.is(true));
+//        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), Is.is(true));
         this.error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), DataUtils.obterData(28, 4, 2017)), Is.is(true));
         this.error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterData(29, 4, 2017)), Is.is(true));
 
         //verificacao via Assert
         Assert.assertEquals(5.0, locacao.getValor(), 0.01);
 
-        Assert.assertTrue(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()));
-        MatcherAssert.assertThat(locacao.getDataLocacao(), ehHoje());
+//        Assert.assertTrue(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()));
+//        MatcherAssert.assertThat(locacao.getDataLocacao(), ehHoje());
 
-        Assert.assertTrue(DataUtils.isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)));
-        MatcherAssert.assertThat(locacao.getDataRetorno(), ehHojeComDiferencaDias(1));
+//        Assert.assertTrue(DataUtils.isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)));
+//        MatcherAssert.assertThat(locacao.getDataRetorno(), ehHojeComDiferencaDias(1));
     }
 
     @Test(expected = FilmeSemEstoqueException.class)
@@ -252,7 +264,15 @@ public class LocacaoServiceTest {
 //        Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 
         // Com PowerMock: Altera o construtor do Date para retornar a data especificada quando instanciado um date com construtor vazio
-        PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(29, 4, 2017));
+//        PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(29, 4, 2017));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 29);
+        calendar.set(Calendar.MONTH, Calendar.APRIL);
+        calendar.set(Calendar.YEAR, 2017);
+
+        PowerMockito.mockStatic(Calendar.class);
+        PowerMockito.when(Calendar.getInstance()).thenReturn(calendar);
 
         // cenario
         Usuario usuario = umUsuario().get();
@@ -272,7 +292,9 @@ public class LocacaoServiceTest {
         MatcherAssert.assertThat(locacao.getDataRetorno(), caiEm(Calendar.MONDAY));
         MatcherAssert.assertThat(locacao.getDataRetorno(), caiNumaSegundaFeira());
 
-        PowerMockito.verifyNew(Date.class, Mockito.times(2)).withNoArguments();
+//        PowerMockito.verifyNew(Date.class, Mockito.times(2)).withNoArguments();
+        PowerMockito.verifyStatic(Mockito.times(2));
+        Calendar.getInstance();
     }
 
     @Test

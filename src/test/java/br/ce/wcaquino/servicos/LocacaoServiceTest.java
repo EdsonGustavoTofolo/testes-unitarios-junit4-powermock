@@ -71,6 +71,7 @@ public class LocacaoServiceTest {
 
     @Before
     public void setup() {
+        // necessario para testar o metodo privado calcularValorLocacao
         service = PowerMockito.spy(service);
 
 //        MockitoAnnotations.initMocks(this);

@@ -1,8 +1,6 @@
-package br.ce.wcaquino.servicos.builders;
+package br.ce.wcaquino.builders;
 
 import br.ce.wcaquino.entidades.Usuario;
-
-import java.util.List;
 
 public class UsuarioBuilder {
     private Usuario usuario;

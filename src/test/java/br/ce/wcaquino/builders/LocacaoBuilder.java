@@ -1,4 +1,4 @@
-package br.ce.wcaquino.servicos.builders;
+package br.ce.wcaquino.builders;
 
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
@@ -8,7 +8,6 @@ import br.ce.wcaquino.utils.DataUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 public class LocacaoBuilder {
     private Locacao locacao;

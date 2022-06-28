@@ -11,13 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static br.ce.wcaquino.servicos.builders.FilmeBuilder.umFilme;
+import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
 import static org.mockito.Mockito.mock;
 
 /*

@@ -1,4 +1,4 @@
-package br.ce.wcaquino.servicos.suites;
+package br.ce.wcaquino.suites;
 
 import br.ce.wcaquino.servicos.CalculadoraTest;
 import br.ce.wcaquino.servicos.DDT_CalculoValorLocacaoTest;

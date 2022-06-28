@@ -49,9 +49,33 @@ public class LocacaoService {
 			throw new LocadoraException("Usuario negativado junto ao SPC.");
 		}
 
+		Locacao locacao = new Locacao();
+		locacao.setFilmes(filmes);
+		locacao.setUsuario(usuario);
+//		locacao.setDataLocacao(new Date());
+		locacao.setDataLocacao(Calendar.getInstance().getTime());
+		locacao.setValor(calcularValorLocacao(filmes));
+
+		//Entrega no dia seguinte
+//		Date dataEntrega = new Date();
+		Date dataEntrega = Calendar.getInstance().getTime();
+		dataEntrega = adicionarDias(dataEntrega, 1);
+		if (DataUtils.verificarDiaSemana(dataEntrega, Calendar.SUNDAY)) {
+			dataEntrega = adicionarDias(dataEntrega, 1);
+		}
+		locacao.setDataRetorno(dataEntrega);
+
+		//Salvando a locacao...	
+		this.locacaoDao.salvar(locacao);
+
+		return locacao;
+	}
+
+	private Double calcularValorLocacao(List<Filme> filmes) {
+		System.out.println("Calculando valor locacao...");
 		AtomicInteger index = new AtomicInteger();
 		Double valorTotal = filmes.stream().map(filme -> {
-			double preco = 0;
+			double preco;
 			switch (index.get()) {
 				case 2 :
 					preco = filme.getPrecoLocacao() * 0.75;
@@ -67,27 +91,7 @@ public class LocacaoService {
 			index.getAndIncrement();
 			return preco;
 		}).reduce(Double::sum).get();
-
-		Locacao locacao = new Locacao();
-		locacao.setFilmes(filmes);
-		locacao.setUsuario(usuario);
-//		locacao.setDataLocacao(new Date());
-		locacao.setDataLocacao(Calendar.getInstance().getTime());
-		locacao.setValor(valorTotal);
-
-		//Entrega no dia seguinte
-//		Date dataEntrega = new Date();
-		Date dataEntrega = Calendar.getInstance().getTime();
-		dataEntrega = adicionarDias(dataEntrega, 1);
-		if (DataUtils.verificarDiaSemana(dataEntrega, Calendar.SUNDAY)) {
-			dataEntrega = adicionarDias(dataEntrega, 1);
-		}
-		locacao.setDataRetorno(dataEntrega);
-
-		//Salvando a locacao...	
-		this.locacaoDao.salvar(locacao);
-
-		return locacao;
+		return valorTotal;
 	}
 
 	public void notificarAtrasos() {

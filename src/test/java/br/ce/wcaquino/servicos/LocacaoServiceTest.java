@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -127,7 +128,7 @@ public class LocacaoServiceTest {
     public void deveAlugarFilme_SemCalcularValor() throws Exception {
         // cenario
         Usuario usuario = umUsuario().get();
-        List<Filme> filmes = Arrays.asList(umFilme().get());
+        List<Filme> filmes = Collections.singletonList(umFilme().get());
 
         PowerMockito.doReturn(1.0).when(service, "calcularValorLocacao", filmes);
 
@@ -138,6 +139,19 @@ public class LocacaoServiceTest {
         Assert.assertThat(locacao.getValor(), is(1.0));
 
         PowerMockito.verifyPrivate(service).invoke("calcularValorLocacao", filmes);
+    }
+
+    @Test
+    public void deveCalcularValorLocacao() throws Exception {
+        // cenario
+        List<Filme> filmes = Collections.singletonList(umFilme().get());
+
+        // acao
+        Double valor = Whitebox.invokeMethod(service, "calcularValorLocacao", filmes);
+
+        // verificacao
+        Assert.assertThat(valor, is(4.0));
+
     }
 
     @Test(expected = FilmeSemEstoqueException.class)

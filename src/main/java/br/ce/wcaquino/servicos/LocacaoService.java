@@ -71,7 +71,7 @@ public class LocacaoService {
 		return locacao;
 	}
 
-	private Double calcularValorLocacao(List<Filme> filmes) {
+	private double calcularValorLocacao(List<Filme> filmes) {
 		System.out.println("Calculando valor locacao...");
 		AtomicInteger index = new AtomicInteger();
 		Double valorTotal = filmes.stream().map(filme -> {

@@ -1,6 +1,8 @@
 # Testes Unitários com jUnit4 e PowerMock
 Projeto desenvolvido para mostrar as funcionalidades de TDD utilizando jUnit 4 e PowerMock
 <br/>
+<br/>
+Este projeto foi criado a partir do curso de testes unitários do curso do @wcaquino na Udemy em [Testes Unitários em JAVA: Domine jUnit, Mockito e TDD](https://www.udemy.com/course/testes-unitarios-em-java/)
 ## Stacks
 * Java 8
 * jUnit 4.12

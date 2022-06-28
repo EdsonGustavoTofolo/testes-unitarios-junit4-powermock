@@ -31,7 +31,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(LocacaoService.class)
+@PrepareForTest({LocacaoService.class, DataUtils.class})
 public class LocacaoServiceTest {
 
     @Rule
@@ -39,6 +39,7 @@ public class LocacaoServiceTest {
     @Rule
     private ExpectedException expectedException = ExpectedException.none();
 
+    // esta ordem do InjectMocks e depois os Mocks deve ser mantida, caso contrario, não funcionara
     @InjectMocks
     private LocacaoService service;
     @Mock
@@ -77,8 +78,11 @@ public class LocacaoServiceTest {
 
     @Test
     public void deveFazerLocarComSucesso() throws Exception {
-        // Assume que só deve executar quando o new Date() nao for Sabado
-        Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+        // Sem PowerMock: Assume que só deve executar quando o new Date() nao for Sabado
+//        Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+
+        // Com PowerMock
+        PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 4, 2017));
 
         //cenario
         Usuario usuario = umUsuario().get();
@@ -89,8 +93,9 @@ public class LocacaoServiceTest {
 
         // verificacao via @Rule ErrorCollector
         this.error.checkThat(locacao.getValor(), Is.is(5.0));
-        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), Is.is(true));
         this.error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), Is.is(true));
+        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), DataUtils.obterData(28, 4, 2017)), Is.is(true));
+        this.error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterData(29, 4, 2017)), Is.is(true));
 
         //verificacao via Assert
         Assert.assertEquals(5.0, locacao.getValor(), 0.01);
@@ -246,7 +251,7 @@ public class LocacaoServiceTest {
         // Sem PowerMock: Assume que só deve executar quando o Date() for Sabádo
 //        Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 
-        // Com PowerMock:
+        // Com PowerMock: Altera o construtor do Date para retornar a data especificada quando instanciado um date com construtor vazio
         PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(29, 4, 2017));
 
         // cenario
@@ -266,6 +271,8 @@ public class LocacaoServiceTest {
         MatcherAssert.assertThat(locacao.getDataRetorno(), new DiaSemanaMatcher(Calendar.MONDAY));
         MatcherAssert.assertThat(locacao.getDataRetorno(), caiEm(Calendar.MONDAY));
         MatcherAssert.assertThat(locacao.getDataRetorno(), caiNumaSegundaFeira());
+
+        PowerMockito.verifyNew(Date.class, Mockito.times(2)).withNoArguments();
     }
 
     @Test

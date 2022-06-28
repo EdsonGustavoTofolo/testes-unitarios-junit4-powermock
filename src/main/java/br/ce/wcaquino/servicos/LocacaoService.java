@@ -51,12 +51,18 @@ public class LocacaoService {
 
 		AtomicInteger index = new AtomicInteger();
 		Double valorTotal = filmes.stream().map(filme -> {
-			double preco = switch (index.get()) {
-				case 2 -> filme.getPrecoLocacao() * 0.75;
-				case 3 -> filme.getPrecoLocacao() * 0.50;
-				case 4 -> filme.getPrecoLocacao() * 0.25;
-				case 5 -> 0d;
-				default -> filme.getPrecoLocacao();
+			double preco = 0;
+			switch (index.get()) {
+				case 2 :
+					preco = filme.getPrecoLocacao() * 0.75;
+					break;
+				case 3 : preco = filme.getPrecoLocacao() * 0.50;
+					break;
+				case 4 : preco = filme.getPrecoLocacao() * 0.25;
+					break;
+				case 5 : preco = 0d;
+					break;
+				default : preco = filme.getPrecoLocacao();
 			};
 			index.getAndIncrement();
 			return preco;
@@ -75,10 +81,10 @@ public class LocacaoService {
 			dataEntrega = adicionarDias(dataEntrega, 1);
 		}
 		locacao.setDataRetorno(dataEntrega);
-		
+
 		//Salvando a locacao...	
 		this.locacaoDao.salvar(locacao);
-		
+
 		return locacao;
 	}
 

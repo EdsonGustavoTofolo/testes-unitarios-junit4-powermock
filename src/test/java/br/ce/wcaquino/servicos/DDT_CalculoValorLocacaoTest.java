@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -59,14 +60,14 @@ public class DDT_CalculoValorLocacaoTest {
 
     @Parameterized.Parameters(name = "{2}")
     public static Collection<Object[]> getParameters() {
-        return List.of(
+        return Arrays.asList(
                 new Object[][] {
-                        { List.of(filme1, filme2), 8.0, "2 Filmes: Sem desconto" },
-                        { List.of(filme1, filme2, filme3), 11.0, "3 Filmes: 25%" },
-                        { List.of(filme1, filme2, filme3, filme4), 13.0, "4 Filmes: 50%" },
-                        { List.of(filme1, filme2, filme3, filme4, filme5), 14.0, "5 Filmes: 75%" },
-                        { List.of(filme1, filme2, filme3, filme4, filme5, filme6), 14.0, "6 Filmes: 100%" },
-                        { List.of(filme1, filme2, filme3, filme4, filme5, filme6, filme7), 18.0, "7 Filmes: Sem desconto" },
+                        { Arrays.asList(filme1, filme2), 8.0, "2 Filmes: Sem desconto" },
+                        { Arrays.asList(filme1, filme2, filme3), 11.0, "3 Filmes: 25%" },
+                        { Arrays.asList(filme1, filme2, filme3, filme4), 13.0, "4 Filmes: 50%" },
+                        { Arrays.asList(filme1, filme2, filme3, filme4, filme5), 14.0, "5 Filmes: 75%" },
+                        { Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6), 14.0, "6 Filmes: 100%" },
+                        { Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6, filme7), 18.0, "7 Filmes: Sem desconto" },
                 }
         );
     }

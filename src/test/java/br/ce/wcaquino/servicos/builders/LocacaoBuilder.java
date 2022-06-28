@@ -6,6 +6,7 @@ import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.utils.DataUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class LocacaoBuilder {
     }
 
     public LocacaoBuilder comFilmes(Filme...filmes) {
-        this.locacao.setFilmes(List.of(filmes));
+        this.locacao.setFilmes(Arrays.asList(filmes));
         return this;
     }
 
